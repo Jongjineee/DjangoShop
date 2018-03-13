@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+{% load staticfiles %}
+<meta charset="UTF-8">
+<title>{% block title %} {% endblock %}</title>
+
+<!-- 부트스트랩 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- 부트스트랩 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- 부트스트랩 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+{% block header %} {% include 'shop/header.html' %} {% endblock header %}
+
+{% block content %}
+
+{% endblock content %}
+
+</div>
+{% block footer %} {% include 'shop/footer.html' %} {% endblock footer %}
+</body>
+</html>
