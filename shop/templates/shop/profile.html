@@ -1,10 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+{% extends "shop/../account/base.html" %}
+
+{% block title %}
+    Profile
+{% endblock title %}
+
+{% block content %}
+    {% load staticfiles %}
+    <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
+
+    <div class="content">
+        <div id="profile_title">
+            <h3>MY PAGE</h3>
+        </div>
+        <div id="profile_account">
+            <ul>
+                <li>
+                    <strong class="title"># 가용적립금</strong>
+                    <strong class="able_data">0원</strong>
+                    <a href="...">CHECK</a>
+                </li>
+                <li>
+                    <strong class="title"># 총적립금</strong>
+                    <strong class="able_data">0원</strong>
+                    <a href="...">CHECK</a>
+                </li>
+                <li>
+                    <strong class="title"># 총주문</strong>
+                    <strong class="able_data">0원</strong>
+                    <a href="...">CHECK</a>
+                </li>
+                <li>
+                    <strong class="title"># 쿠폰</strong>
+                    <strong class="able_data">0원</strong>
+                    <a href="...">CHECK</a>
+                </li>
+            </ul>
+        </div>
+        <div id="profile_main">
+            <ul>
+                <li>
+                    <h3>
+                        <a href="...">
+                            <strong>ORDER LIST</strong>
+                        </a>
+                    </h3>
+                    <br>
+                    고객님께서 주문하신 상품의 주문내역을 확인하실 수 있습니다.
+                </li>
+                <li>
+                    <h3>
+                        <a href="...">
+                            <strong>MY INFO</strong>
+                        </a>
+                    </h3>
+                    <br>
+                    회원이신 고객님의 개인정보를 관리하는 공간입니다.<br>
+                    개인정보를 최신 정보로 유지하시면 보다 간편히 쇼핑을 즐기실 수 있습니다.
+                </li>
+                <li>
+                    <h3>
+                        <a href="...">
+                            <strong>WISH LIST</strong>
+                        </a>
+                    </h3>
+                    <br>
+                    관심상품으로 등록하신 상품의 목록을 보여드립니다.
+                </li>
+                <li>
+                    <h3>
+                        <a href="...">
+                            <strong>MY POINT</strong>
+                        </a>
+                    </h3>
+                    <br>
+                    적립금은 상품 구매 시 사용하실 수 있습니다.<br>
+                    적립된 금액은 현금으로 환불되지 않습니다.
+                </li>
+                <li>
+                    <h3>
+                        <a href="...">
+                            <strong>MY COUPON</strong>
+                        </a>
+                    </h3>
+                    <br>
+                    고객님이 보유하고 계신 쿠폰내역을 보여드립니다.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+{% endblock content %}
+

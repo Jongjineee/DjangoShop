@@ -1,24 +1,13 @@
 
-{% extends "shop/base.html" %}
+{% extends "shop/../account/base.html" %}
 
 {% block title %}
     Index
 {% endblock title %}
 
 {% block content %}
-    <div id="wrap">
-        <div class="left-wrap">
-            {% block left_side %} {% include 'shop/left_side.html' %} {% endblock left_side %}
-        </div>
 
-        <div class="right-wrap">
             {% block right_side %} {% include 'shop/right_side.html' %} {% endblock right_side %}
-        </div>
-    </div>
-
-
-
-    {% block footer %} {% include 'shop/footer.html' %} {% endblock footer %}
 
 {% endblock content %}
 

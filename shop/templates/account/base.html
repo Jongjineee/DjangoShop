@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+
+{% block header %} {% include 'shop/header.html' %} {% endblock header %}
+<div id="wrap">
+    <div class="left-wrap" style="margin-left: 50px;">
+        {% block left_side %} {% include 'shop/left_side.html' %} {% endblock left_side %}
+    </div>
+
+    <div class="right-wrap">
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+</div>
+{% block footer %} {% include 'shop/footer.html' %} {% endblock footer %}
+
+</body>
+</html>

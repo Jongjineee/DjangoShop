@@ -17,9 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 from shop import views as shop_views
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    url(r'^$', shop_views.IndexView.as_view(), name = 'root'),
-    url(r'^shop/', include('shop.urls')),
+from django.conf import settings
+from django.conf.urls.static import static
 
+urlpatterns = [
+    url('admin/', admin.site.urls),
+    url(r'^$', shop_views.index, name = 'root'),
+    url(r'^shop/', include('shop.urls')),
+    url(r'^accounts/', include('allauth.urls')),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
