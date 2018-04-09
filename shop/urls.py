@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^notice/$', views.notice, name='notice'),
+    url(r'^notice/(?P<pk>[0-9]+)/$', views.notice_detail, name='notice_detail'),
 
 ]
