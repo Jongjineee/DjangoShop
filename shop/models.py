@@ -8,6 +8,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     image = ImageField(upload_to='photos')
     price = models.IntegerField()
+    quantity = models.IntegerField(default=0)
     description = models.TextField()
     pub_date = models.DateTimeField(auto_now_add = True)
 
@@ -27,7 +28,7 @@ class Order(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,)
-    now_order_list = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='user_order_now', blank=True)
+    order_date = models.DateTimeField(auto_now_add=True)
     all_order_list = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='user_order_all', blank=True)
     wish_list = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='user_wish_order', blank=True)
 

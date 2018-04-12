@@ -18,7 +18,7 @@ def profile(request, pk):
 
 def notice(request):
     post_list = Post.objects.all()
-    paginator = Paginator(post_list, 1)
+    paginator = Paginator(post_list, 10)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -37,6 +37,14 @@ def notice_detail(request, pk):
 def order_list(request, pk):
     user = User.objects.get(pk=pk)
     orders = Order.objects.filter(user=user)
+    paginator = Paginator(orders, 5)
+    page = request.GET.get('page')
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
     context = {'user': user, 'orders': orders}
     return render(request, 'shop/order_list.html', context)
 
