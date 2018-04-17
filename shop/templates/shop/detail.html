@@ -9,6 +9,54 @@
     {% load staticfiles %}
     <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
     <div class="content">
+        <div class="detailArea">
+            <div class="product_img_area">
+                <div class="key_img">
+                    <img src = '{{ product.image.url }}' width='300' />
+                </div>
+            </div>
+            <div class="infoArea">
+                <h3>{{ product.name }}</h3>
+                <div class="detailinfo">
+                    <p>{{ product.description }}</p>
+                </div>
+                <div class="detail_payment">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th>
+                                <span>
+                                    PRICE
+                                </span>
+                            </th>
+                            <td>
+                                <span>
+                                    <strong>
+                                        {{ product.price }} 원
+                                    </strong>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <span>
+                                    POINT
+                                </span>
+                            </th>
+                            <td>
+                                <span>
+                                    <strong>
+                                        {{ point }} 원
+                                    </strong>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 {% endblock content %}
