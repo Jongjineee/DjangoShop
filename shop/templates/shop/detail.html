@@ -54,6 +54,27 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="payment">
+                    <div class="btnArea">
+                        <ul>
+                            {% if product.quantity > 0 %}
+                                <li class="cart">
+                                    <a href="{% url "shop:insert_cart" product.pk %}">+ ADD SHOPPING CART</a>
+                                </li>
+                                <li class="wish">
+                                    + ADD WISH LIST
+                                </li>
+                                <li class="buy">
+                                    BUY IT NOW
+                                </li>
+                            {% else %}
+                                <li class="soldout">
+                                    SOLD OUT (X)
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 

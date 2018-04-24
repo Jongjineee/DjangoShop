@@ -1,8 +1,9 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import TemplateView
-from .models import Product, Post, Point, Order, Category
+from .models import Product, Post, Point, Order, Category, Cart
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
+from django.contrib import messages
 # Create your views here.
 
 
@@ -164,3 +165,27 @@ def product_detail(request, pk):
     point = int(product.price * 0.01)
     context = {"product": product, "point": point}
     return render(request, 'shop/detail.html', context)
+
+
+def cart(request, pk):
+    user = User.objects.get(pk=pk)
+    cart = Cart.objects.filter(user=user)
+    paginator = Paginator(cart, 5)
+    page = request.GET.get('page')
+    try:
+        cart = paginator.page(page)
+    except PageNotAnInteger:
+        cart = paginator.page(1)
+    except EmptyPage:
+        cart = paginator.page(paginator.num_pages)
+    context = {'user': user, 'cart': cart}
+    return render(request, 'shop/cart.html', context)
+
+def insert_cart(request, pk):
+    product = Product.objects.get(pk=pk)
+    cart = Cart.objects.filter(user=request.user)
+    cart.product = product
+    cart.save()
+    messages.success(request, '장바구니 등록 완료')
+
+    return redirect('shop:product_detail', pk)

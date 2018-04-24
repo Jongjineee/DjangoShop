@@ -38,7 +38,13 @@ class Order(models.Model):
         on_delete=models.CASCADE,)
     order_date = models.DateTimeField(auto_now_add=True)
     all_order_list = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='user_order_all', blank=True)
-    wish_list = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='user_wish_order', blank=True)
+
+
+class Cart(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE, )
+    products = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wish_product', blank=True)
 
 
 class Post(models.Model):
