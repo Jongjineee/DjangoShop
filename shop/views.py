@@ -181,11 +181,22 @@ def cart(request, pk):
     context = {'user': user, 'cart': cart}
     return render(request, 'shop/cart.html', context)
 
-def insert_cart(request, pk):
-    product = Product.objects.get(pk=pk)
-    cart = Cart.objects.filter(user=request.user)
-    cart.product = product
-    cart.save()
-    messages.success(request, '장바구니 등록 완료')
 
-    return redirect('shop:product_detail', pk)
+def insert_cart(request, pk):
+
+    if request.method == 'POST':
+        product = Product.objects.get(pk=pk)
+        user = request.user
+
+        if Cart.objects.filter(products=product):
+            cart=Cart.objects.get(products=product)
+            Cart.objects.filter(products=product).update(quantity=cart.quantity+1)
+            messages.success(request, '장바구니 등록 완료')
+            return redirect('shop:product_detail', pk)
+
+        else:
+            cart = Cart(user=user, products=product)
+            cart.save()
+            messages.success(request, '장바구니 등록 완료')
+            return redirect('shop:product_detail', pk)
+

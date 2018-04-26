@@ -41,11 +41,14 @@ class Order(models.Model):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE, )
     products = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wish_product', blank=True)
+    quantity = models.IntegerField(default=1)
 
+    def __str__(self):
+        return '{} // {}'.format(self.user, self.products.name)
 
 class Post(models.Model):
     title = models.CharField(max_length=255)

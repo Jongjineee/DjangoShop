@@ -59,7 +59,10 @@
                         <ul>
                             {% if product.quantity > 0 %}
                                 <li class="cart">
-                                    <a href="{% url "shop:insert_cart" product.pk %}">+ ADD SHOPPING CART</a>
+                                    <form action="{% url "shop:insert_cart" product.pk %}", method="POST">
+                                        <button type="submit">+ ADD SHOPPING CART</button>
+                                        {% csrf_token %}
+                                    </form>
                                 </li>
                                 <li class="wish">
                                     + ADD WISH LIST
