@@ -64,11 +64,11 @@
                                         {% csrf_token %}
                                     </form>
                                 </li>
-                                <li class="wish">
-                                    + ADD WISH LIST
-                                </li>
                                 <li class="buy">
-                                    BUY IT NOW
+                                    <form action="{% url "shop:buyitnow" product.pk %}", method="POST">
+                                        <button type="submit">BUY IT NOW</button>
+                                        {% csrf_token %}
+                                    </form>
                                 </li>
                             {% else %}
                                 <li class="soldout">

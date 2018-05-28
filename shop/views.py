@@ -200,3 +200,11 @@ def insert_cart(request, pk):
             messages.success(request, '장바구니 등록 완료')
             return redirect('shop:product_detail', pk)
 
+def buyitnow(request, pk) :
+    if request.method == 'POST':
+        product = Product.objects.get(pk=pk)
+        user = request.user
+
+    context = {'user': user, 'product': product}
+
+    return render(request, 'shop/payment.html', context)
