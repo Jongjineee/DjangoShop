@@ -63,6 +63,19 @@ class Post(models.Model):
         return '{} by {}'.format(self.title, self.author)
 
 
+class Order(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE, )
+    address = models.TextField()
+    phone_number = models.IntegerField()
+    post_number = models.IntegerField()
+    products = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_product', blank=False)
+
+    def __str__(self):
+        return '{} by {}'.format(self.products.name, self.user)
+
+
 
 
 

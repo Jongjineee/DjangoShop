@@ -4,6 +4,7 @@ from .models import Product, Post, Point, Order, Category, Cart
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .forms import OrderForm
 # Create your views here.
 
 
@@ -208,3 +209,20 @@ def buyitnow(request, pk) :
     context = {'user': user, 'product': product}
 
     return render(request, 'shop/payment.html', context)
+
+
+def payment(request, pk) :
+    if request.method == 'POST':
+        user = request.user
+        product = Product.objects.get(pk=pk)
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.products = product
+            order.user = user
+            order.save()
+            messages.success(request, '상품주문이 완료되었습니다.')
+
+            return render(request, 'shop/index.html')
+
+    return redirect('shop:detail', pk)

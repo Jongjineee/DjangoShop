@@ -42,4 +42,5 @@ urlpatterns = [
     url(r'^acc_page/(?P<pk>[0-9]+)/buyitnow/$', views.buyitnow, name='buyitnow'),
     url(r'^cart/(?P<pk>[0-9]+)/$', views.cart, name='cart'),
 
+
 ]
