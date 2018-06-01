@@ -10,7 +10,8 @@ from .forms import OrderForm
 
 def index(request):
     products = Product.objects.all()
-    context = {'products': products}
+    categories = Category.objects.all()
+    context = {'products': products, 'categories': categories}
     return render(request, 'shop/index.html', context)
 
 
@@ -21,6 +22,7 @@ def profile(request, pk):
 
 def notice(request):
     post_list = Post.objects.all()
+    categories = Category.objects.all()
     paginator = Paginator(post_list, 10)
     page = request.GET.get('page')
     try:
@@ -29,7 +31,7 @@ def notice(request):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    context = {'posts': posts}
+    context = {'posts': posts, 'categories': categories}
     return render(request, 'shop/notice.html', context)
 
 
@@ -54,10 +56,11 @@ def order_list(request, pk):
     return render(request, 'shop/order_list.html', context)
 
 
-def suit_page(request):
-    suit = Category.objects.get(sort='suit')
-    lank_products = Product.objects.filter(category=suit).order_by('-hit')
-    products = Product.objects.filter(category=suit).order_by('pub_date')
+def show_category(request, category_id):
+    categories = Category.objects.all()
+    category = Category.objects.get(pk=category_id)
+    products = Product.objects.filter(category=category).order_by('pub_date')
+    lank_products = Product.objects.filter(category=category).order_by('-hit')
     paginator = Paginator(products, 5)
     page = request.GET.get('page')
     try:
@@ -66,98 +69,8 @@ def suit_page(request):
         products = paginator.page(1)
     except EmptyPage:
         products = paginator.page(paginator.num_pages)
-    context = {'lank_products': lank_products, 'products': products}
-    return render(request, 'shop/suit.html', context)
-
-def outer_page(request):
-    outer = Category.objects.get(sort='outer')
-    lank_products = Product.objects.filter(category=outer).order_by('-hit')[:5]
-    products = Product.objects.filter(category=outer).order_by('pub_date')
-    paginator = Paginator(products, 5)
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
-    except EmptyPage:
-        products = paginator.page(paginator.num_pages)
-    context = {'lank_products': lank_products, 'products': products}
-    return render(request, 'shop/outer.html', context)
-
-def acc_page(request):
-    acc = Category.objects.get(sort='acc')
-    lank_products = Product.objects.filter(category=acc).order_by('-hit')[:5]
-    products = Product.objects.filter(category=acc).order_by('pub_date')
-    paginator = Paginator(products, 5)
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
-    except EmptyPage:
-        products = paginator.page(paginator.num_pages)
-    context = {'lank_products': lank_products, 'products': products}
-    return render(request, 'shop/acc.html', context)
-
-def bottom_page(request):
-    bottom = Category.objects.get(sort='bottom')
-    lank_products = Product.objects.filter(category=bottom).order_by('-hit')[:5]
-    products = Product.objects.filter(category=bottom).order_by('pub_date')
-    paginator = Paginator(products, 5)
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
-    except EmptyPage:
-        products = paginator.page(paginator.num_pages)
-    context = {'lank_products': lank_products, 'products': products}
-    return render(request, 'shop/bottom.html', context)
-
-def shirts_page(request):
-    shirts = Category.objects.get(sort='shirts')
-    lank_products = Product.objects.filter(category=shirts).order_by('-hit')[:5]
-    products = Product.objects.filter(category=shirts).order_by('pub_date')
-    paginator = Paginator(products, 5)
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
-    except EmptyPage:
-        products = paginator.page(paginator.num_pages)
-    context = {'lank_products': lank_products, 'products': products}
-    return render(request, 'shop/shirts.html', context)
-
-def shoes_page(request):
-    shoes = Category.objects.get(sort='shoes')
-    lank_products = Product.objects.filter(category=shoes).order_by('-hit')[:5]
-    products = Product.objects.filter(category=shoes).order_by('pub_date')
-    paginator = Paginator(products, 5)
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
-    except EmptyPage:
-        products = paginator.page(paginator.num_pages)
-    context = {'lank_products': lank_products, 'products': products}
-    return render(request, 'shop/shoes.html', context)
-
-def top_page(request):
-    top = Category.objects.get(sort='top')
-    lank_products = Product.objects.filter(category=top).order_by('-hit')[:5]
-    products = Product.objects.filter(category=top).order_by('pub_date')
-    paginator = Paginator(products, 5)
-    page = request.GET.get('page')
-    try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
-    except EmptyPage:
-        products = paginator.page(paginator.num_pages)
-    context = {'lank_products': lank_products, 'products': products}
-    return render(request, 'shop/top.html', context)
+    context = {'lank_products': lank_products, 'products': products, 'category': category, 'categories': categories}
+    return render(request, 'shop/category.html', context)
 
 
 def product_detail(request, pk):
