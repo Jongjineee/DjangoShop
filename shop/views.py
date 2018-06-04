@@ -42,6 +42,7 @@ def notice_detail(request, pk):
 
 
 def order_list(request, pk):
+    categories = Category.objects.all()
     user = User.objects.get(pk=pk)
     orders = Order.objects.filter(user=user)
     paginator = Paginator(orders, 5)
@@ -52,7 +53,7 @@ def order_list(request, pk):
         orders = paginator.page(1)
     except EmptyPage:
         orders = paginator.page(paginator.num_pages)
-    context = {'user': user, 'orders': orders}
+    context = {'user': user, 'orders': orders, 'categories': categories}
     return render(request, 'shop/order_list.html', context)
 
 
@@ -73,15 +74,18 @@ def show_category(request, category_id):
     return render(request, 'shop/category.html', context)
 
 
-def product_detail(request, pk):
+def product_detail(request, category_id, pk):
+    categories = Category.objects.all()
+    category = Category.objects.get(pk=category_id)
     product = Product.objects.get(pk=pk)
     Product.objects.filter(pk=pk).update(hit=product.hit+1)
     point = int(product.price * 0.01)
-    context = {"product": product, "point": point}
+    context = {"product": product, "point": point, "category": category, "categories": categories}
     return render(request, 'shop/detail.html', context)
 
 
 def cart(request, pk):
+    categories = Category.objects.all()
     user = User.objects.get(pk=pk)
     cart = Cart.objects.filter(user=user)
     paginator = Paginator(cart, 5)
@@ -92,11 +96,11 @@ def cart(request, pk):
         cart = paginator.page(1)
     except EmptyPage:
         cart = paginator.page(paginator.num_pages)
-    context = {'user': user, 'cart': cart}
+    context = {'user': user, 'cart': cart, 'categories': categories}
     return render(request, 'shop/cart.html', context)
 
 
-def insert_cart(request, pk):
+def insert_cart(request, category_id, pk):
 
     if request.method == 'POST':
         product = Product.objects.get(pk=pk)
@@ -114,7 +118,9 @@ def insert_cart(request, pk):
             messages.success(request, '장바구니 등록 완료')
             return redirect('shop:product_detail', pk)
 
-def buyitnow(request, pk) :
+def buyitnow(request, category_id,  pk) :
+    category = Category.objects.get(pk=category_id)
+    categories = Category.objects.all()
     if request.method == 'POST':
         product = Product.objects.get(pk=pk)
         user = request.user
