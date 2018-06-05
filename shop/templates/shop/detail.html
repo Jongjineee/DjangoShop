@@ -59,13 +59,13 @@
                         <ul>
                             {% if product.quantity > 0 %}
                                 <li class="cart">
-                                    <form action="{% url "shop:insert_cart" category.pk product.pk %}", method="POST">
+                                    <form action="{% url "shop:insert_cart" product.pk %}", method="POST">
                                         <button type="submit">+ ADD SHOPPING CART</button>
                                         {% csrf_token %}
                                     </form>
                                 </li>
                                 <li class="buy">
-                                    <form action="{% url "shop:buyitnow" category.pk product.pk %}", method="POST">
+                                    <form action="{% url "shop:buyitnow" product.pk %}", method="POST">
                                         <button type="submit">BUY IT NOW</button>
                                         {% csrf_token %}
                                     </form>

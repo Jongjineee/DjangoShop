@@ -74,10 +74,10 @@ def show_category(request, category_id):
     return render(request, 'shop/category.html', context)
 
 
-def product_detail(request, category_id, pk):
+def product_detail(request, pk):
     categories = Category.objects.all()
-    category = Category.objects.get(pk=category_id)
     product = Product.objects.get(pk=pk)
+    category = Category.objects.get(pk=product.category.pk)
     Product.objects.filter(pk=pk).update(hit=product.hit+1)
     point = int(product.price * 0.01)
     context = {"product": product, "point": point, "category": category, "categories": categories}
@@ -100,7 +100,7 @@ def cart(request, pk):
     return render(request, 'shop/cart.html', context)
 
 
-def insert_cart(request, category_id, pk):
+def insert_cart(request, pk):
 
     if request.method == 'POST':
         product = Product.objects.get(pk=pk)
@@ -118,14 +118,13 @@ def insert_cart(request, category_id, pk):
             messages.success(request, '장바구니 등록 완료')
             return redirect('shop:product_detail', pk)
 
-def buyitnow(request, category_id,  pk) :
-    category = Category.objects.get(pk=category_id)
+def buyitnow(request, pk) :
     categories = Category.objects.all()
     if request.method == 'POST':
         product = Product.objects.get(pk=pk)
         user = request.user
 
-    context = {'user': user, 'product': product}
+    context = {'user': user, 'product': product, 'caregories': categories}
 
     return render(request, 'shop/payment.html', context)
 
