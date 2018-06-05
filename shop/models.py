@@ -32,14 +32,6 @@ class Point(models.Model):
     able_point = models.IntegerField()
 
 
-class Order(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,)
-    order_date = models.DateTimeField(auto_now_add=True)
-    all_order_list = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='user_order_all', blank=True)
-
-
 class Cart(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -67,10 +59,10 @@ class Order(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE, )
-    address = models.TextField()
-    phone_number = models.IntegerField()
-    post_number = models.IntegerField()
-    products = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_product', blank=False)
+    address = models.TextField(default=0)
+    phone_number = models.IntegerField(default=0)
+    post_number = models.IntegerField(default=0)
+    products = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_product')
 
     def __str__(self):
         return '{} by {}'.format(self.products.name, self.user)
