@@ -124,23 +124,7 @@ def buyitnow(request, pk) :
         product = Product.objects.get(pk=pk)
         user = request.user
 
-    context = {'user': user, 'product': product, 'caregories': categories}
+        context = {'user': user, 'product': product, 'categories': categories}
 
-    return render(request, 'shop/payment.html', context)
+        return render(request, 'shop/order_pay.html', context)
 
-
-def payment(request, pk) :
-    if request.method == 'POST':
-        user = request.user
-        product = Product.objects.get(pk=pk)
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.products = product
-            order.user = user
-            order.save()
-            messages.success(request, '상품주문이 완료되었습니다.')
-
-            return render(request, 'shop/index.html')
-
-    return redirect('shop:detail', pk)
