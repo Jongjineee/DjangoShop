@@ -70,6 +70,19 @@
                                         {% csrf_token %}
                                     </form>
                                 </li>
+                                <table>
+                                    <tbody class="product_option">
+                                        <tr class="product_quantity">
+                                            <td>
+                                                <select>
+                                                    {% for i in quantity_list %}
+                                                        <option>{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             {% else %}
                                 <li class="soldout">
                                     SOLD OUT (X)

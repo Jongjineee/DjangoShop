@@ -61,7 +61,7 @@ def show_category(request, category_id):
     categories = Category.objects.all()
     category = Category.objects.get(pk=category_id)
     products = Product.objects.filter(category=category).order_by('pub_date')
-    lank_products = Product.objects.filter(category=category).order_by('-hit')
+    lank_products = Product.objects.filter(category=category).order_by('-hit')[:4]
     paginator = Paginator(products, 5)
     page = request.GET.get('page')
     try:
@@ -80,7 +80,10 @@ def product_detail(request, pk):
     category = Category.objects.get(pk=product.category.pk)
     Product.objects.filter(pk=pk).update(hit=product.hit+1)
     point = int(product.price * 0.01)
-    context = {"product": product, "point": point, "category": category, "categories": categories}
+    quantity_list = []
+    for i in range(1, product.quantity) :
+        quantity_list.append(i)
+    context = {"quantity_list": quantity_list, "product": product, "point": point, "category": category, "categories": categories}
     return render(request, 'shop/detail.html', context)
 
 
