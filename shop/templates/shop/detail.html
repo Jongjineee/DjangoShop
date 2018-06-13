@@ -10,6 +10,15 @@
     <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
     <div class="content">
         <div class="detailArea">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <div class="product_img_area">
                 <div class="key_img">
                     <img src = '{{ product.image.url }}' width='300' />
@@ -53,6 +62,35 @@
                         </tr>
                         </tbody>
                     </table>
+                    {% if product.quantity > 0 %}
+                        <table>
+                            <tbody class="product_option">
+                            <tr class="product_quantity">
+                                <th>
+                                    수량
+                                </th>
+                                <td>
+                                    <select>
+                                        {% for i in quantity_list %}
+                                            <option>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <table>
+                            <tbody class="product_option">
+                            <tr class="product_quantity">
+                                <th>
+                                    SOLD OUT
+                                </th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    {% endif %}
                 </div>
                 <div class="payment">
                     <div class="btnArea">
@@ -70,19 +108,7 @@
                                         {% csrf_token %}
                                     </form>
                                 </li>
-                                <table>
-                                    <tbody class="product_option">
-                                        <tr class="product_quantity">
-                                            <td>
-                                                <select>
-                                                    {% for i in quantity_list %}
-                                                        <option>{{ i }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+
                             {% else %}
                                 <li class="soldout">
                                     SOLD OUT (X)
