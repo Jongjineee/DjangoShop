@@ -10,15 +10,6 @@
     <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
     <div class="content">
         <div class="detailArea">
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        <li class="{{ message.tags }}">
-                            {{ message }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
             <div class="product_img_area">
                 <div class="key_img">
                     <img src = '{{ product.image.url }}' width='300' />
@@ -75,7 +66,6 @@
                                             <option>{{ i }}</option>
                                         {% endfor %}
                                     </select>
-
                                 </td>
                             </tr>
                             </tbody>
@@ -108,7 +98,16 @@
                                         {% csrf_token %}
                                     </form>
                                 </li>
-
+                                {% if messages %}
+                                    <ul class="messages">
+                                        {% for message in messages %}
+                                            <li class="{{ message.tags }}">
+                                                {{ message }}<br>
+                                                <a href="{% url "shop:cart" user.pk %}">장바구니로 이동</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
                             {% else %}
                                 <li class="soldout">
                                     SOLD OUT (X)

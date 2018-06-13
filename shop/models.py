@@ -59,9 +59,8 @@ class Order(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE, )
-    address = models.TextField(default=0)
-    phone_number = models.IntegerField(default=0)
-    post_number = models.IntegerField(default=0)
+    name = models.CharField(max_length=100, verbose_name='상품명', default=False)
+    amount = models.PositiveIntegerField(verbose_name='결제금액', default=False)
     products = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_product')
 
     def __str__(self):

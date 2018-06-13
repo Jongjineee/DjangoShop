@@ -15,9 +15,11 @@ def index(request):
     return render(request, 'shop/index.html', context)
 
 
+
 def profile(request, pk):
     user = User.objects.get(pk=pk)
-    return render(request, 'shop/profile.html')
+    categories = Category.objects.all()
+    return render(request, 'shop/profile.html', {'categories': categories})
 
 
 def notice(request):
@@ -39,6 +41,7 @@ def notice_detail(request, pk):
     post = Post.objects.get(pk=pk)
     context = {"post": post}
     return render(request, 'shop/notice_detail.html', context)
+
 
 
 def order_list(request, pk):
@@ -103,6 +106,7 @@ def cart(request, pk):
     return render(request, 'shop/cart.html', context)
 
 
+
 def insert_cart(request, pk):
 
     if request.method == 'POST':
@@ -121,6 +125,7 @@ def insert_cart(request, pk):
             messages.success(request, '장바구니 등록 완료')
             return redirect('shop:product_detail', pk)
 
+
 def buyitnow(request, pk) :
     categories = Category.objects.all()
     if request.method == 'POST':
@@ -130,4 +135,22 @@ def buyitnow(request, pk) :
         context = {'user': user, 'product': product, 'categories': categories}
 
         return render(request, 'shop/order_pay.html', context)
+
+
+def order_new(request, product_id):
+    product = Product.objects.filter(pk=product_id)
+    initial = {'name': product.name, 'amount': product.price}
+
+    if request.method == 'POST':
+        form = OrderForm(request.POST, initial=initial)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user = request.user
+            order.product = product
+            return redirect('shop:product_detail', product_id)
+    else:
+        form= OrderForm(initial=initial)
+
+
+
 
