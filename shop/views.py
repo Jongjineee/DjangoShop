@@ -126,31 +126,27 @@ def insert_cart(request, pk):
             return redirect('shop:product_detail', pk)
 
 
-def buyitnow(request, pk) :
+def buyitnow(request, pk):
     categories = Category.objects.all()
-    if request.method == 'POST':
-        product = Product.objects.get(pk=pk)
-        user = request.user
-
-        context = {'user': user, 'product': product, 'categories': categories}
-
-        return render(request, 'shop/order_pay.html', context)
-
-
-def order_new(request, product_id):
-    product = Product.objects.filter(pk=product_id)
+    product = get_object_or_404(Product, pk=pk)
+    user = request.user
     initial = {'name': product.name, 'amount': product.price}
 
     if request.method == 'POST':
         form = OrderForm(request.POST, initial=initial)
         if form.is_valid():
             order = form.save(commit=False)
-            order.user = request.user
-            order.product = product
-            return redirect('shop:product_detail', product_id)
+            order.user = user
+            order.products = product
+            order.save()
+            return redirect('shop:order_list', user.pk)
     else:
-        form= OrderForm(initial=initial)
+        form = OrderForm(initial=initial)
 
-
-
-
+    return render(request, 'shop/order_pay.html', {
+        'form': form,
+        'iamport_shop_id': 'iamport', #FIXME: 가맹점코드
+        'user': user,
+        'product': product,
+        'categories': categories,
+    })

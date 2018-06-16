@@ -93,7 +93,7 @@
                                     </form>
                                 </li>
                                 <li class="buy">
-                                    <form action="{% url "shop:buyitnow" product.pk %}", method="POST">
+                                    <form action="{% url "shop:buyitnow" product.pk %}", method="get">
                                         <button type="submit">BUY IT NOW</button>
                                         {% csrf_token %}
                                     </form>
