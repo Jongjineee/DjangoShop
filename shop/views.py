@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import TemplateView
+from django.contrib.auth.decorators import login_required
 from .models import Product, Post, Point, Order, Category, Cart
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
@@ -94,7 +95,7 @@ def cart(request, pk):
     categories = Category.objects.all()
     user = User.objects.get(pk=pk)
     cart = Cart.objects.filter(user=user)
-    paginator = Paginator(cart, 5)
+    paginator = Paginator(cart, 10)
     page = request.GET.get('page')
     try:
         cart = paginator.page(page)
@@ -106,47 +107,44 @@ def cart(request, pk):
     return render(request, 'shop/cart.html', context)
 
 
-
-def insert_cart(request, pk):
-
-    if request.method == 'POST':
-        product = Product.objects.get(pk=pk)
-        user = request.user
-
-        if Cart.objects.filter(products=product):
-            cart=Cart.objects.get(products=product)
-            Cart.objects.filter(products=product).update(quantity=cart.quantity+1)
-            messages.success(request, '장바구니 등록 완료')
-            return redirect('shop:product_detail', pk)
-
-        else:
-            cart = Cart(user=user, products=product)
-            cart.save()
-            messages.success(request, '장바구니 등록 완료')
-            return redirect('shop:product_detail', pk)
-
-
-def buyitnow(request, pk):
-    categories = Category.objects.all()
-    product = get_object_or_404(Product, pk=pk)
+def cart_or_buy(request, pk):
+    product = Product.objects.get(pk=pk)
     user = request.user
+    categories = Category.objects.all()
     initial = {'name': product.name, 'amount': product.price}
-
     if request.method == 'POST':
-        form = OrderForm(request.POST, initial=initial)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.user = user
-            order.products = product
-            order.save()
-            return redirect('shop:order_list', user.pk)
-    else:
-        form = OrderForm(initial=initial)
+        if 'add_cart' in request.POST:
+            quantity = int(request.POST.get('quantity'))
+            if Cart.objects.filter(products=product):
+                cart = Cart.objects.get(products=product)
+                cart.quantity += quantity
+                cart.save()
+                messages.success(request,'장바구니 등록 완료')
+                return redirect('shop:cart', user.pk )
+            else:
+                cart = Cart(user=user, products=product)
+                cart.quantity = quantity
+                cart.save()
+                messages.success(request, '장바구니 등록 완료')
+                return redirect('shop:cart', user.pk)
 
-    return render(request, 'shop/order_pay.html', {
-        'form': form,
-        'iamport_shop_id': 'iamport', #FIXME: 가맹점코드
-        'user': user,
-        'product': product,
-        'categories': categories,
-    })
+        elif 'buy' in request.POST:
+            quantity = int(request.POST.get('quantity'))
+            form = OrderForm(request.POST, initial=initial)
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.user = user
+                order.products = product
+                order.save()
+                return redirect('shop:order_list', user.pk)
+            else:
+                form = OrderForm(initial=initial)
+
+            return render(request, 'shop/order_pay.html', {
+                'form': form,
+                'quantity': quantity,
+                'iamport_shop_id': 'iamport',  # FIXME: 가맹점코드
+                'user': user,
+                'product': product,
+                'categories': categories,
+            })

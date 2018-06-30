@@ -14,8 +14,7 @@ urlpatterns = [
     url(r'^notice/(?P<pk>[0-9]+)/$', views.notice_detail, name='notice_detail'),
     url(r'^(?P<category_id>[0-9]+)/$', views.show_category, name='show_category'),
     url(r'^detail/(?P<pk>[0-9]+)/$', views.product_detail, name='product_detail'),
-    url(r'^(?P<pk>[0-9]+)/insert_cart$', views.insert_cart, name='insert_cart'),
-    url(r'^(?P<pk>[0-9]+)/buyitnow$', views.buyitnow, name='buyitnow'),
+    url(r'^(?P<pk>[0-9]+)/cart_or_buy$', views.cart_or_buy, name='cart_or_buy'),
     url(r'^cart/(?P<pk>[0-9]+)/$', views.cart, name='cart'),
 
 ]

@@ -20,6 +20,7 @@
                 <div class="detailinfo">
                     <p>{{ product.description }}</p>
                 </div>
+            <form action="{% url "shop:cart_or_buy" product.pk %}", method="POST">
                 <div class="detail_payment">
                     <table>
                         <tbody>
@@ -53,50 +54,48 @@
                         </tr>
                         </tbody>
                     </table>
-                    {% if product.quantity > 0 %}
-                        <table>
-                            <tbody class="product_option">
-                            <tr class="product_quantity">
-                                <th>
-                                    수량
-                                </th>
-                                <td>
-                                    <select>
-                                        {% for i in quantity_list %}
-                                            <option>{{ i }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <table>
-                            <tbody class="product_option">
-                            <tr class="product_quantity">
-                                <th>
-                                    SOLD OUT
-                                </th>
-                            </tr>
-                            </tbody>
-                        </table>
-                    {% endif %}
+
+                        {% if product.quantity > 0 %}
+                            <table>
+                                <tbody class="product_option">
+                                <tr class="product_quantity">
+                                    <th>
+                                        수량
+                                    </th>
+                                    <td>
+                                        <select name="quantity">
+                                            {% for quantity in quantity_list %}
+                                                <option value={{ quantity }}>{{ quantity }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <table>
+                                <tbody class="product_option">
+                                <tr class="product_quantity">
+                                    <th>
+                                        SOLD OUT
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        {% endif %}
                 </div>
+
                 <div class="payment">
                     <div class="btnArea">
                         <ul>
                             {% if product.quantity > 0 %}
                                 <li class="cart">
-                                    <form action="{% url "shop:insert_cart" product.pk %}", method="POST">
-                                        <button type="submit">+ ADD SHOPPING CART</button>
-                                        {% csrf_token %}
-                                    </form>
+                                    <button type="submit" name="add_cart" value="add_cart">+ ADD SHOPPING CART</button>
+                                    {% csrf_token %}
                                 </li>
                                 <li class="buy">
-                                    <form action="{% url "shop:buyitnow" product.pk %}", method="get">
-                                        <button type="submit">BUY IT NOW</button>
-                                        {% csrf_token %}
-                                    </form>
+                                    <button type="submit" name="buy" value="buy_it_now">BUY IT NOW</button>
+                                    {% csrf_token %}
                                 </li>
                                 {% if messages %}
                                     <ul class="messages">
@@ -116,6 +115,7 @@
                         </ul>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
 
