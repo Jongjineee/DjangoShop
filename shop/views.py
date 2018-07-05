@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
 from .models import Product, Post, Point, Order, Category, Cart
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
@@ -13,6 +14,7 @@ def index(request):
     products = Product.objects.all()
     categories = Category.objects.all()
     context = {'products': products, 'categories': categories}
+
     return render(request, 'shop/index.html', context)
 
 
@@ -106,27 +108,44 @@ def cart(request, pk):
     context = {'user': user, 'cart': cart, 'categories': categories}
     return render(request, 'shop/cart.html', context)
 
+def delete_cart(request, pk):
+    user = request.user
+    cart = Cart.objects.filter(user=user)
+    quantity = 0
 
+    if request.method == 'POST':
+        pk = int(request.POST.get('product'))
+        product = Product.objects.get(pk=pk)
+        for i in cart:
+            if i.products == product :
+                quantity =  i.quantity
+
+        if quantity > 0 :
+            product = Product.objects.filter(pk=pk)
+            cart = Cart.objects.filter(user=user, products__in=product)
+            cart.delete()
+            return redirect('shop:cart', user.pk)
+
+@login_required
 def cart_or_buy(request, pk):
     product = Product.objects.get(pk=pk)
     user = request.user
     categories = Category.objects.all()
     initial = {'name': product.name, 'amount': product.price}
+    cart = Cart.objects.filter(user=user)
     if request.method == 'POST':
         if 'add_cart' in request.POST:
             quantity = int(request.POST.get('quantity'))
-            if Cart.objects.filter(products=product):
-                cart = Cart.objects.get(products=product)
-                cart.quantity += quantity
-                cart.save()
-                messages.success(request,'장바구니 등록 완료')
-                return redirect('shop:cart', user.pk )
-            else:
-                cart = Cart(user=user, products=product)
-                cart.quantity = quantity
-                cart.save()
-                messages.success(request, '장바구니 등록 완료')
-                return redirect('shop:cart', user.pk)
+            for i in cart :
+                if i.products == product:
+                    product = Product.objects.filter(pk=pk)
+                    Cart.objects.filter(user=user, products__in=product).update(quantity=F('quantity') + quantity)
+                    messages.success(request,'장바구니 등록 완료')
+                    return redirect('shop:cart', user.pk)
+
+            Cart.objects.create(user=user, products=product, quantity=quantity)
+            messages.success(request, '장바구니 등록 완료')
+            return redirect('shop:cart', user.pk)
 
         elif 'buy' in request.POST:
             quantity = int(request.POST.get('quantity'))
