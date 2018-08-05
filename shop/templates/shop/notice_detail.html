@@ -1,0 +1,43 @@
+
+{% extends "shop/../account/base.html" %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock title %}
+
+{% block content %}
+    {% load staticfiles %}
+    <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
+    <div class="content">
+        <div id="board_list">
+            <div id="board_list_title">
+                <div id="board_title">
+                    <h2>
+                        <span>NOTICE</span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    <div class="board_view">
+        <table>
+            <tbody>
+            <tr>
+                <td>{{ post.title }}</td>
+            </tr>
+            <tr>
+                <td>
+                    <p>
+                        {{ post.content }}
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="board_bottom">
+        <span class="left">
+            <a href="{% url 'shop:notice' %}">LIST</a>
+        </span>
+    </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,61 @@
+
+{% extends "shop/../account/base.html" %}
+
+{% block title %}
+    NOTICE
+{% endblock title %}
+
+{% block content %}
+    {% load staticfiles %}
+    <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
+    <div class="content">
+        <div id="board_list">
+            <div id="board_list_title">
+                <div id="board_title">
+                    <h2>
+                        <span>NOTICE</span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="board_table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>no</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for post in posts %}
+                        <tr>
+                            <td>{{ post.id }}</td>
+                            <td><a href="{% url 'shop:notice_detail' post.pk %}">{{ post.title }}</a></td>
+                            <td>{{ post.author }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- pagenation nav -->
+        <div class="board_paging">
+            <ol>
+            {% if posts.has_previous %}
+                <li class="paging_pre">
+                    <a href="{% url 'shop:notice' %}?page={{ posts.previous_page_number }}"><</a>
+                </li>
+            {% endif %}
+
+                <li><a href="#">{{ posts.number }}</a></li>
+
+            {% if posts.has_next %}
+                <li class="paging_next">
+                    <a href="{% url 'shop:notice' %}?page={{ posts.next_page_number }}">></a>
+                </li>
+            {% endif %}
+            </ol>
+        </div>
+    </div>
+{% endblock content %}

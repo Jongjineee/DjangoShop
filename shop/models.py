@@ -61,6 +61,7 @@ class Order(models.Model):
         on_delete=models.CASCADE, )
     name = models.CharField(max_length=100, verbose_name='상품명')
     amount = models.PositiveIntegerField(verbose_name='결제금액')
+    quantity = models.IntegerField(default=1)
     products = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_product')
     order_date = models.DateTimeField(auto_now_add=True)
 

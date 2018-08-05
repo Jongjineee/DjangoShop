@@ -1,0 +1,97 @@
+
+{% extends "shop/../account/base.html" %}
+
+{% block title %}
+    MY CART
+{% endblock title %}
+
+{% block content %}
+    {% load staticfiles %}
+    {% load thumbnail %}
+    <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
+    <div class="content">
+        <div id="pagetitle">
+            <h3>SHOPPING CART</h3>
+        </div>
+        <form action="{% url "shop:delete_cart" user.pk %}" method="POST">
+            <div class="order_list">
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="thumb">
+                            SELECT
+                        </th>
+                        <th class="thumb">
+                            IMAGE
+                        </th>
+                        <th class="product">
+                            PRODUCT
+                        </th>
+                        <th class="quantity">
+                            QUANTITY
+                        </th>
+                        <th class="price">
+                            PRICE
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 리스트 안에 담겨서 나오기 때문에 for 문을 써서 출력 -->
+                    {% for product in cart %}
+                        <tr>
+                            <td>
+                                <input type="radio" id="product_{{ product.id }}" name="product" value="{{ product.products.id }}">
+                            </td>
+                            <td class="thumb">
+                                {% thumbnail product.products.image "100x100" crop="center" as im %}
+                                    <a href="{% url 'shop:product_detail' product.products.pk %}">
+                                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ product.name }}">
+                                    </a>
+                                {% endthumbnail %}
+                            </td>
+                            <td class="product">
+                                {{ product.products.name }}
+                            </td>
+                            <td class="quantity">
+                                {{ product.quantity }}
+                            </td>
+                            <td>
+                                {{ product.products.price }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="order_option">
+            <span class="left">
+                <span class="text">
+                    선택상품을
+                </span>
+                <button type="submit" name="delete_cart" value="delete_cart">삭제하기</button>
+                {% csrf_token %}
+            </span>
+            </div>
+        </form>
+        <!-- pagenation nav -->
+        <div class="board_paging">
+            <ol>
+                {% if orders.has_previous %}
+                    <li class="paging_pre">
+                        <a href="{% url 'shop:order_list' %}?page={{ orders.previous_page_number }}"><</a>
+                    </li>
+                {% endif %}
+
+                <li><a href="#">{{ orders.number }}</a></li>
+
+                {% if orders.has_next %}
+                    <li class="paging_next">
+                        <a href="{% url 'shop:orser_list' %}?page={{ orders.next_page_number }}">></a>
+                    </li>
+                {% endif %}
+            </ol>
+        </div>
+    </div>
+{% endblock content %}

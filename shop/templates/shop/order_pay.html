@@ -1,0 +1,99 @@
+
+{% extends "shop/../account/base.html" %}
+
+{% block title %}
+    PAYMENT
+{% endblock title %}
+
+{% block content %}
+    {% load staticfiles %}
+    {% load thumbnail %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-x.y.z.js"></script>
+
+    <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
+    <div class="content">
+        <div id="pagetitle">
+            <h3>PAYMENT</h3>
+        </div>
+        <div class="order_list">
+            <table>
+                <thead>
+                <tr>
+                    <th class="thumb">
+                        IMAGE
+                    </th>
+                    <th class="product">
+                        PRODUCT
+                    </th>
+                    <th class="quantity">
+                        QUANTITY
+                    </th>
+                    <th class="price">
+                        PRICE
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="thumb">
+                        {% thumbnail product.image "100x100" crop="center" as im %}
+                            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ im.name }}">
+                        {% endthumbnail %}
+                    </td>
+                    <td class="product">
+                        {{ product.name }}
+                    </td>
+                    <td class="quantity">
+                        {{ quantity }}
+                    </td>
+                    <td>
+                        {{ product.price }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="order_option">
+            <form action="" method="POST" id="order-form">
+                {% csrf_token %}
+                <div>
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                    {{ initial }}
+                </div>
+                <input type="submit" class="btn" value="결제하기">
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra_body %}
+    <script src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+    <script>
+        $(function() {
+            var $form = $('#order-form');
+            var params = {
+                name: $form.find('[name=name]').val(),
+                amount: $form.find('[name=amount]').val(),
+            };
+            IMP.init('{{ iamport_shop_id }}');
+            IMP.request_pay(params, function(response_data) {
+                console.log('response_data :', response_data);
+                if ( ! response_data.success ) {
+                    alert(response_data.error_msg + "(" + response_data.error_code + ")");
+                    location.href = '{% url "shop:index" %}';
+                }
+                else {
+                     $.each(response_data, function(key, vlaue) {
+                        $form.find("input[name=" + key + "]").val(value);
+                    });
+                    $form.submit();
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

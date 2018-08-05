@@ -1,0 +1,92 @@
+
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'shop/style.css' %}" type="text/css">
+
+<div class="logo-space">
+    <a href="{% url 'root' %}"><img src="{% static 'shop/images/main.png' %}"></a>
+</div>
+
+<div class="side-top">
+    <div class="account">
+        <ul>
+            {% if user.is_active %}
+                <li>
+                    <a href="{% url 'account_logout' %}">LOGOUT</a>
+                </li>
+                <li>
+                    <a href="{% url 'shop:profile' user.pk %}">MY PAGE</a>
+                </li>
+                <li>
+                    <a href="{% url 'shop:cart' user.pk %}">CART</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'account_login' %}">LOGIN</a>
+                </li>
+                <li>
+                    <a href="{% url 'account_signup' %}">SIGN UP</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <ul>
+        <li>
+            <a href="{% url 'shop:notice' %}">NOTICE</a>
+        </li>
+        <li>
+            <a href="...">Q&A</a>
+        </li>
+        <li>
+            <a href="...">REVIEW</a>
+        </li>
+        <li>
+            <a href="...">MEMBERSHIP</a>
+        </li>
+        <li>
+            <a href="...">입고지연</a>
+        </li>
+    </ul>
+</div>
+
+<div class="side-category">
+    <ul>
+        {% for category in categories %}
+            <li>
+                <a href="{% url 'shop:show_category' category.pk %}">{{ category.sort }}</a>
+            </li>
+        {% endfor %}
+        <li>
+            <a href="...">SALE</a>
+        </li>
+    </ul>
+</div>
+
+<div class="side-bottom">
+    <ul>
+        <li>
+            C/S CENTER. 031-XXX-XXXX
+        </li>
+        <li>
+            MON-FRI / 11:00 - 18:00
+        </li>
+        <li>
+            LUNCH 12:00 - 13:00
+        </li>
+        <li>
+            SAT, SUN, HOLLIDAY OFF
+        </li>
+        <li>
+            BANKING.
+        </li>
+        <li>
+            신한 XXX-XXX-XXXXXX
+        </li>
+        <li>
+            국민 XXXXXX-XX-XXXXXX
+        </li>
+        <li>
+            [이종진(쇼핑몰)]
+        </li>
+    </ul>
+</div>

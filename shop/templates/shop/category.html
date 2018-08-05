@@ -1,0 +1,78 @@
+
+{% extends "shop/../account/base.html" %}
+
+{% block title %}
+    {{ category }}
+{% endblock title %}
+
+{% block content %}
+    {% load staticfiles %}
+    {% load thumbnail %}
+    <link rel="stylesheet" type='text/css' href="{% static 'shop/style.css' %}">
+    <div class="content">
+        <div class="product_title">
+            <h2>
+                <span>{{ category }}</span>
+            </h2>
+        </div>
+        <div class="recommend_list">
+            <ul class="product_list">
+                {% for product in lank_products %}
+                    <li>
+                        <div class="box">
+                            <h3>
+                                <span>BEST</span>
+                            </h3>
+                            {% thumbnail product.image "240x240" crop="center" as im %}
+                                <a href="{% url 'shop:product_detail' product.pk %}">
+                                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ product.name }}">
+                                </a>
+                            {% endthumbnail %}
+                            <p class="name">
+                                <a href="{% url 'shop:product_detail' product.pk %}">
+                                    <strong class="displaynone">
+                                        <span style="font-size: 11px; color:#222222;">{{ product.products.name }}</span>
+                                    </strong>
+                                </a>
+                            </p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="nomal_list">
+            <ul class="product_list">
+                {% for product in products %}
+                    <li>
+                        <div class="box">
+                            {% thumbnail product.image "240x240" crop="center" as im %}
+                                <a href="{% url 'shop:product_detail' product.pk %}">
+                                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ product.name }}">
+                                </a>
+                            {% endthumbnail %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- pagenation nav -->
+        <div class="board_paging">
+            <ol>
+                {% if products.has_previous %}
+                    <li class="paging_pre">
+                        <a href="{% url 'shop:show_products' %}?page={{ products.previous_page_number }}"><</a>
+                    </li>
+                {% endif %}
+
+                <li><a href="#">{{ products.number }}</a></li>
+
+                {% if products.has_next %}
+                    <li class="paging_next">
+                        <a href="{% url 'shop:show_products' %}?page={{ products.next_page_number }}">></a>
+                    </li>
+                {% endif %}
+            </ol>
+        </div>
+    </div>
+{% endblock content %}

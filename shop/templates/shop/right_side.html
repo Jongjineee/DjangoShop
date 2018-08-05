@@ -1,0 +1,51 @@
+{% load staticfiles %}
+{% load thumbnail %}
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/TweenMax.min.js"></script>
+<script src="{% static 'shop/top_slide_controller.js' %}" type="text/javascript"></script>
+<script src="{% static 'shop/weekly_slide.js' %}" type="text/javascript"></script>
+<link rel="stylesheet" href="{% static 'shop/style.css' %}" type="text/css">
+
+
+<div class="content">
+    <div class="slide">
+        <ul>
+            <li><img src="{% static 'shop/images/slide-img1.jpg' %}" alt=""></li>
+            <li><img src="{% static 'shop/images/slide-img2.jpg' %}" alt=""></li>
+            <li><img src="{% static 'shop/images/slide-img3.jpg' %}" alt=""></li>
+            <li><img src="{% static 'shop/images/slide-img4.jpg' %}" alt=""></li>
+            <li><img src="{% static 'shop/images/slide-img5.jpg' %}" alt=""></li>
+        </ul>
+    </div>
+    <div class="weekly_slide">
+        <h2>
+            <span>- WEEKLY BEST PRODUCTS -</span>
+        </h2>
+
+        <div class="slide_item">
+            <ul>
+                {% for product in products %}
+                    {% thumbnail product.image "200x200" crop="center" as im %}
+                        <li><img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ product.name }}"></li>
+                    {% endthumbnail %}
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="new_arrival">
+        <h2>
+            <span>- NEW ARRIVAL -</span>
+        </h2>
+        <ul class="new_arrival_list">
+            {% for product in products %}
+                {% thumbnail product.image "370x370" crop="center" as im %}
+                    <li><img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ product.name }}"></li>
+                {% endthumbnail %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+

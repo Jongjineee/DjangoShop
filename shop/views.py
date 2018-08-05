@@ -11,7 +11,7 @@ from .forms import OrderForm
 
 
 def index(request):
-    products = Product.objects.all()
+    products = Product.objects.order_by('-pub_date')
     categories = Category.objects.all()
     context = {'products': products, 'categories': categories}
 
@@ -41,8 +41,9 @@ def notice(request):
 
 
 def notice_detail(request, pk):
+    categories = Category.objects.all()
     post = Post.objects.get(pk=pk)
-    context = {"post": post}
+    context = {"post": post, "categories":  categories}
     return render(request, 'shop/notice_detail.html', context)
 
 
@@ -128,14 +129,14 @@ def delete_cart(request, pk):
 
 @login_required
 def cart_or_buy(request, pk):
+    quantity = int(request.POST.get('quantity'))
     product = Product.objects.get(pk=pk)
     user = request.user
     categories = Category.objects.all()
-    initial = {'name': product.name, 'amount': product.price}
+    initial = {'name': product.name, 'amount': product.price, 'quantity': quantity}
     cart = Cart.objects.filter(user=user)
     if request.method == 'POST':
         if 'add_cart' in request.POST:
-            quantity = int(request.POST.get('quantity'))
             for i in cart :
                 if i.products == product:
                     product = Product.objects.filter(pk=pk)
@@ -148,14 +149,15 @@ def cart_or_buy(request, pk):
             return redirect('shop:cart', user.pk)
 
         elif 'buy' in request.POST:
-            quantity = int(request.POST.get('quantity'))
             form = OrderForm(request.POST, initial=initial)
             if form.is_valid():
                 order = form.save(commit=False)
                 order.user = user
+                order.quantity = quantity
                 order.products = product
                 order.save()
                 return redirect('shop:order_list', user.pk)
+
             else:
                 form = OrderForm(initial=initial)
 
